@@ -1,0 +1,93 @@
+# Base.Bottom <: Union{}
+struct Bottom end
+
+const ⊥ = Bottom()
+const bottom = ⊥
+
+
+# Cant give a concrete not `Nothing` parametric return type, could we?
+function absurb end
+
+# In Julia, no return value means `nothing` returns, thus it essentially equal to
+# `function unit(_) end`. Single pair of `()` in julia is `Tuple{}`, while function call has form `f()`, 
+# with no space inside, thus here we still consider `Nothing` inputs, rather than inputs causing `f(())`.
+function unit(_::Any)::Nothing end
+
+# `Bool` is a type in julia, similar to bool in cpp, it has intrisinc value of 0, and 1.
+# However, Julia is a strong type language, thus
+# ```
+#   if 1
+#       ...
+#   end
+# ```
+# is not legal.
+@enum EnumBool begin
+    FALSE   # equals 0
+    TRUE    # equals 1
+end
+
+abstract type TypeBool end
+struct TypeTrue <: TypeBool end
+struct TypeFalse <: TypeBool end
+const True = TypeTrue()
+const False = TypeFalse()
+
+# Challenges
+MemoizedTable = Dict()
+
+function memoize(f, args...)
+    key = (nameof(f), args...)
+    if !haskey(MemoizedTable, key)
+        MemoizedTable[key] = f(args...)
+    end
+
+    MemoizedTable[key]
+end
+
+clear_memoize() = empty!(MemoizedTable)
+
+# for cpp like codes
+# Cxx.jl is still under fixing and updating, thus here use c codes
+function compile_chapter02()
+    now_dir = pwd()
+    cd(@__DIR__)
+    run(`gcc -c -o chapter02.o chapter02.c`)
+    if Sys.iswindows()
+        run(`gcc -shared -o chapter02.dll chapter02.o`)
+        run(`cmd /c del chapter02.o`)
+    else
+        run(`gcc -shared -o chapter02.so chatper02.o`)
+        run(`rm chapter02.o`)
+    end
+    cd(now_dir)
+end
+
+getchar() = ccall(:getchar, Cchar, ())
+f_int(x::Int) = ccall((:f_int, joinpath(@__DIR__, "chapter02.dll")), Cint, (Cint, ), x)
+f_bool() = ccall((:f_bool, joinpath(@__DIR__, "chapter02.dll")), Bool, ())
+
+pure_bool2bools = [
+    (x::Bool) -> id(x),
+    (_::Bool) -> true,
+    (_::Bool) -> false,
+    (x::Bool) -> !x, 
+]
+
+
+# user interactive test units
+function test_getchar()
+    clear_memoize()
+    @info "Testing `getchar()` now, enter two characters: "
+    char1 = memoize(getchar)
+    @info string("First one: ", char1, ", second one: ", memoize(getchar))
+end
+
+function test_fbool()
+    clear_memoize()
+    @info "Run `memoize(f_bool)` for 10 times, and there should be only one \"Hello!\" to print."
+    map(1:10) do _
+        memoize(f_bool)
+    end
+end
+
+
