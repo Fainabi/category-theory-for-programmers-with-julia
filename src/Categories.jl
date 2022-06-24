@@ -7,6 +7,7 @@ function __init__()
         @info "Compile c functions"
         try
             compile_chapter02()
+        catch e
         end
     end
 end

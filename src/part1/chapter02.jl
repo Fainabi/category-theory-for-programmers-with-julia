@@ -1,3 +1,5 @@
+import Libdl
+
 # Base.Bottom <: Union{}
 struct Bottom end
 
@@ -46,25 +48,35 @@ end
 
 clear_memoize() = empty!(MemoizedTable)
 
+extfile = joinpath(@__DIR__, "chapter02." * Libdl.dlext)
+
 # for cpp like codes
 # Cxx.jl is still under fixing and updating, thus here use c codes
 function compile_chapter02()
-    now_dir = pwd()
-    cd(@__DIR__)
-    run(`gcc -c -o chapter02.o chapter02.c`)
-    if Sys.iswindows()
-        run(`gcc -shared -o chapter02.dll chapter02.o`)
-        run(`cmd /c del chapter02.o`)
-    else
-        run(`gcc -shared -o chapter02.so chatper02.o`)
-        run(`rm chapter02.o`)
+    C_code = raw"""
+// Cxx.jl is still under fixing, here use C codes
+#include <stdbool.h>
+#include <stdio.h>
+
+bool f_bool() {
+    puts("Hello!\n");
+    return true;
+}
+
+int f_int(int x) {
+    static int y = 0;
+    y += x;
+    return y;
+}
+"""
+    open(`gcc -xc -shared -o $(extfile) -`, "w") do f
+        print(f, C_code)
     end
-    cd(now_dir)
 end
 
 getchar() = ccall(:getchar, Cchar, ())
-f_int(x::Int) = ccall((:f_int, joinpath(@__DIR__, "chapter02.dll")), Cint, (Cint, ), x)
-f_bool() = ccall((:f_bool, joinpath(@__DIR__, "chapter02.dll")), Bool, ())
+f_int(x::Int) = ccall((:f_int, extfile), Cint, (Cint, ), x)
+f_bool() = ccall((:f_bool, extfile), Bool, ())
 
 pure_bool2bools = [
     (x::Bool) -> id(x),
