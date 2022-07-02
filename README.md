@@ -8,3 +8,4 @@ every julia file is corresponded to one chapter for notes and implementations.
 Also in `test/runtests.jl`, there collected some implemented challenges from the book,
 which could be tested by running `] test` in julia's repl.
 
+The first part was implemented with some personal ideas of morphism, and the utilization of [Catlab.jl](https://github.com/AlgebraicJulia/Catlab.jl) is in the file of `catlab.jl`.

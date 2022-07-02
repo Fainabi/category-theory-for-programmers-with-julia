@@ -3,14 +3,14 @@ using Categories
 import Random
 
 @testset "Tests from chapter01, composition" begin
-    for _ in 1:100
+    for _ in 1:10
         randvec = rand(100);
 
-        id_sum = compose(sum, id)
-        sum_id = compose(id, sum)
+        id_sum = sum ∘ identity
+        sum_id = identity ∘ sum
 
-        id_min = compose(minimum, id)
-        min_id = compose(id, minimum)
+        id_min = minimum ∘ identity
+        min_id = identity ∘ minimum
 
         @test sum_id(randvec) ≈ id_sum(randvec)
         @test min_id(randvec) ≈ id_min(randvec)
@@ -21,14 +21,14 @@ end
     @testset "Challenge 2, random number" begin
         clear_memoize()
         first_rand = memoize(rand)
-        for _ in 1:100
+        for _ in 1:10
             @test first_rand ≈ memoize(rand)
         end
     end
 
     @testset "Challenge 3, random with seed" begin
         clear_memoize()
-        for seed in 1:100
+        for seed in 1:10
             memoize(Random.seed!, seed)
             rand1 = rand()
 
@@ -45,7 +45,7 @@ end
 
         origin = f_int(0)
         for idx in 1:5
-            inputs = collect(1:100)
+            inputs = collect(1:10)
             for i in 1:length(inputs)
                 @test memoize(f_int, inputs[i]) == origin + sum(inputs[1:i])
             end
@@ -53,13 +53,14 @@ end
     end
 end
 
+import Categories: Chapter03
 @testset "Tests from chapter03, monoids" begin
     @testset "Challenge 3, bool monoids" begin
         # Julia && and || are not identifiers
-        AND = MonoidOperation(Monoid{Bool}, &)
-        OR = MonoidOperation(Monoid{Bool}, |)
-        m_true = Monoid(false)
-        m_false = Monoid(false)
+        AND = Chapter03.MonoidOperation(Chapter03.Monoid{Bool}, &)
+        OR = Chapter03.MonoidOperation(Chapter03.Monoid{Bool}, |)
+        m_true = Chapter03.Monoid(false)
+        m_false = Chapter03.Monoid(false)
         m_bool = [m_true, m_false]
 
         # (m_bool, AND) and (m_bool, OR) are two monoids

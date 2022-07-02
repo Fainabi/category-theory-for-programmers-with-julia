@@ -1,9 +1,9 @@
 # Type `Any` is the union of all types, and thus `id` is the identity morphism over any type. 
-id(x) = x
+id_type(x) = x
 
 # Julia has built-in `∘` operator, which could be typed with `\circ`
 # Inputs and outputs are regarded as tuples. 
-compose(f, g) = x -> g(f(x))
+compose_fun(f, g) = x -> g(f(x))
 
 
 # One possible category for WWW, the morphism means connected in graph, which satisfies identity and composition law.

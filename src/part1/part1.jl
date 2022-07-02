@@ -1,7 +1,7 @@
 include("types.jl")
 
 include("chapter01.jl")
-export id, compose
+export id_type, compose_fun
 
 include("chapter02.jl")
 export ⊥, bottom, unit, 
@@ -9,10 +9,12 @@ export ⊥, bottom, unit,
         f_bool, f_int, getchar, test_getchar, test_fbool, pure_bool2bools
 
 
+module Chapter03
 include("chapter03.jl")
 export emptyof, append, Monoid, ++,
         MonoidOperation, MonoidCategory
         FreeCategory, NamedFreeCategory, addpoint!, addarrow!
+end
 
 include("chapter04.jl")
 export Writer, w_compose, w_id,

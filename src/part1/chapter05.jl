@@ -60,14 +60,8 @@ function Base.show(io::IO, m::Morphism{S, T}) where {S, T}
 end
 
 # with type declared, the composition is easy
-function compose(f::Morphism{R, S}, g::Morphism{S, T})::Morphism{R, T} where {R, S, T}
-    Morphism(R => T, g.f ∘ f.f)
-end
 function (∘)(g::Morphism{S, T}, f::Morphism{R, S})::Morphism{R, T} where {R, S, T}
-    compose(f, g)
-end
-function id(::Type{T})::Morphism{T, T} where T
-    Morphism(T => T, identity)
+    Morphism(R => T, g.f ∘ f.f)
 end
 
 # Julia has first and last method, the Pair type has first and second attributes
