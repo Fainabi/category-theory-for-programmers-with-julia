@@ -27,6 +27,12 @@ struct Morphism{S, T} <: AbstractMorphism
     end
 end
 
+# allow function (...) :: T --> S; f:: Function end
+Base.convert(::Type{Morphism{S, T}}, f::Morphism) where {S, T} = f
+Base.convert(::Type{<:Morphism}, f::Morphism) = f
+Base.convert(::Type{Morphism{S, T}}, f::Function) where {S, T} = Morphism{S, T}(f)
+
+
 # eval
 function (m::Morphism{S, T})(x::S)::T where {S, T}
     m.f(x)

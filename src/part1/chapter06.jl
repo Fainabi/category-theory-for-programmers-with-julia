@@ -67,6 +67,15 @@ function Base.show(io::IO,  l::List{T}) where T
 end
 
 from_vec(v::AbstractVector) = isempty(v) ? nil : Cons(first(v), from_vec(v[2:end]))  # if len == 2, v[2:end] = []
+Base.collect(::Nil) = []
+function Base.collect(lst::List{T}) where T
+    res = T[]
+    while !isnothing(maybeTail(lst))
+        push!(res, lst.a)
+        lst = lst.cons
+    end
+    res
+end
 
 """
     @list
