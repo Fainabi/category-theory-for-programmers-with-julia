@@ -1,0 +1,5 @@
+include("semigroup.jl")
+include("monoid.jl")
+include("functor.jl")
+include("applicative.jl")
+include("monad.jl")

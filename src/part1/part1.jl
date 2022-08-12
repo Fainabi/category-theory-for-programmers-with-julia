@@ -11,7 +11,7 @@ export ⊥, bottom, unit,
 
 module Chapter03
 include("chapter03.jl")
-export emptyof, append, Monoid, ++,
+export emptyof, append, Monoid,
         MonoidOperation, MonoidCategory
         FreeCategory, NamedFreeCategory, addpoint!, addarrow!
 end
