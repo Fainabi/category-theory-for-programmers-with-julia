@@ -2,6 +2,8 @@ using Test
 using Categories
 import Random
 
+Categories.compile_chapter02()
+
 @testset "Tests from chapter01, composition" begin
     for _ in 1:10
         randvec = rand(100);

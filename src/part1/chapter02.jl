@@ -53,6 +53,10 @@ extfile = joinpath(@__DIR__, "chapter02." * Libdl.dlext)
 # for cpp like codes
 # Cxx.jl is still under fixing and updating, thus here use c codes
 function compile_chapter02()
+    if isfile(extfile)
+        return
+    end
+
     C_code = raw"""
 // Cxx.jl is still under fixing, here use C codes
 #include <stdbool.h>

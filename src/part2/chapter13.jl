@@ -1,9 +1,9 @@
 # ================== Free Monoids  ====================
 # Monoids in category
-import Catlab.Theories: MonoidalCategory
+import Catlab.Theories: ThMonoidalCategory
 
 
-@instance MonoidalCategory{List, Morphism} begin
+@instance ThMonoidalCategory{List, Morphism} begin
     dom(m::Morphism) = m.typechain.first
     codom(m::Morphism) = m.typechain.second
     compose(m1::Morphism, m2::Morphism) = m1 ∘ m2
